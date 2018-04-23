@@ -21,8 +21,8 @@ class ArticleDetailFragment : Fragment() {
                 article.articleTitle = it.getString(ARTICLE_TITLE)
                 article.pubDate = it.getString(ArticleDetailFragment.ARTICLE_PUB)
                 article.description = it.getString(ArticleDetailFragment.ARTICLE_DESCRIPTION)
-                // TODO: fix toolbar title issue on orientation change
-                activity?.toolbar_layout?.title = article.articleTitle
+                article.category = it.getString(ArticleDetailFragment.ARTICLE_CATEGORY)
+
             }
         }
     }
@@ -31,8 +31,10 @@ class ArticleDetailFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.article_detail, container, false)
 
+        // todo: add category to view and xml layout file
         // load article details in respective views
         article.let {
+            activity?.toolbar_layout?.title = it.articleTitle
             rootView.article_pub_date.text = it.pubDate
             rootView.article_description.text = it.description
         }
@@ -41,8 +43,9 @@ class ArticleDetailFragment : Fragment() {
     }
 
     companion object {
-        const val ARTICLE_TITLE = "item_id"
+        const val ARTICLE_TITLE = "article_title"
         const val ARTICLE_PUB = "article_pub_date"
         const val ARTICLE_DESCRIPTION = "article_description"
+        const val ARTICLE_CATEGORY = "article_category"
     }
 }

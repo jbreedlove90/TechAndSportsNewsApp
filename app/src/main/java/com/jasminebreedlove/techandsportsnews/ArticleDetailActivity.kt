@@ -31,6 +31,7 @@ class ArticleDetailActivity : AppCompatActivity() {
                             intent.getStringExtra(ArticleDetailFragment.ARTICLE_TITLE))
                     putString(ArticleDetailFragment.ARTICLE_PUB, intent.getStringExtra(ArticleDetailFragment.ARTICLE_PUB))
                     putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, intent.getStringExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION))
+                    putString(ArticleDetailFragment.ARTICLE_CATEGORY, intent.getStringExtra(ArticleDetailFragment.ARTICLE_CATEGORY))
                 }
             }
 

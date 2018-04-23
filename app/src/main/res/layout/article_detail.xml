@@ -23,5 +23,7 @@
         android:padding="16dp"
         android:textIsSelectable="true" />
 
+    <!-- add category view here -->
+
 
 </LinearLayout>

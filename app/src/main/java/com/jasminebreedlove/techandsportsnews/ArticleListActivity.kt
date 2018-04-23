@@ -52,7 +52,7 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
                 response?.body()?.channel?.articleList?.forEach { articles.add(it) }
 
                 response?.body()?.channel?.articleList?.forEach { info("Tech article info:::: title: " +
-                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}") }
+                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}\ncategory: ${it.category}") }
 
                 article_list.adapter = ArticleRecyclerViewAdapter(this@ArticleListActivity, articles, twoPane)
             }
@@ -74,22 +74,26 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
             onClickListener = View.OnClickListener { v ->
                 val article = v.tag as Article
                 if (twoPane) {
-                    val fragment = ArticleDetailFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
-                            putString("ARTICLE_PUB_DATE", article.pubDate)
-                            putString("ARTICLE_DESCRIPTION", article.description)
+                    if (parentActivity.intent.extras.containsKey(CategoryChooser.TECH_CATEGORY_SELECTOR)) {
+                        val fragment = ArticleDetailFragment().apply {
+                            arguments = Bundle().apply {
+                                putString(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                                putString(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
+                                putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
+                                putString(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
+                            }
                         }
+                        parentActivity.supportFragmentManager
+                                .beginTransaction()
+                                .replace(R.id.article_detail_container, fragment) // replace existing article content
+                                .commit()
                     }
-                    parentActivity.supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.article_detail_container, fragment) // replace existing article content
-                            .commit()
                 } else {
                     val intent = Intent(v.context, ArticleDetailActivity::class.java).apply {
                         putExtra(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
                         putExtra(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
                         putExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
+                        putExtra(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
                     }
                     v.context.startActivity(intent)
                 }
