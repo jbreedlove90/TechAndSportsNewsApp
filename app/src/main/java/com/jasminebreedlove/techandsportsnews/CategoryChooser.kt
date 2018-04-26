@@ -18,14 +18,20 @@ class CategoryChooser : AppCompatActivity(), AnkoLogger {
         when(view.id) {
             R.id.select_tech_btn -> {
                 info("tech ::: ")
-                val techIntent = Intent(this, ArticleListActivity::class.java)
-                techIntent.putExtra(TECH_CATEGORY_SELECTOR, "retrieve_tech")
-                startActivity(techIntent)
+                val techIntent = Intent(this, ArticleListActivity::class.java).apply {
+                    putExtra(TECH_CATEGORY_SELECTOR, "retrieve_tech")
+                }
+                startActivityForResult(techIntent,0)
+            //    startActivity(techIntent)
             }
 
             R.id.select_sports_btn -> {
                 info("sports :::")
-            //    startActivity(Intent(this, SportsArticleListActivity::class.java))
+                val sportsIntent = Intent(this, SportsArticleListActivity::class.java).apply {
+                    putExtra(SPORTS_CATEGORY_SELECTOR, "retrieve_sports")
+                }
+                startActivityForResult(sportsIntent,0)
+            //    startActivity(sportsIntent)
             }
 
         }

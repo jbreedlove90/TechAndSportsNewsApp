@@ -9,6 +9,8 @@ import retrofit2.http.GET
 import org.simpleframework.xml.convert.AnnotationStrategy
 import org.simpleframework.xml.core.Persister
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Created by Jasmine Breedlove on 4/19/2018.
@@ -24,12 +26,12 @@ class NewsServiceImpl : AnkoLogger{
     }
 
     companion object {
-        const val BASE_ABC_NEWS_URL = "http://abcnews.go.com/abcnews/"
+        const val BASE_ABC_NEWS_URL = "http://abcnews.go.com/"
     }
 
     interface NewsService {
-        @GET("technologyheadlines")
-        fun getTechNews() : Call<Rss>
+        @GET("abcnews/{endpoint}")
+        fun getRssFeed(@Path("endpoint") endpoint: String) : Call<Rss>
 
         @GET("sportsheadlines")
         fun getSportsNews() : Call<Rss>

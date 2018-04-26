@@ -8,14 +8,14 @@
     tools:context=".ArticleDetailFragment">
 
     <TextView
-        android:id="@+id/article_pub_date"
+        android:id="@+id/sports_article_pub_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:textIsSelectable="true" />
 
     <TextView
-        android:id="@+id/article_description"
+        android:id="@+id/sports_article_description"
         style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

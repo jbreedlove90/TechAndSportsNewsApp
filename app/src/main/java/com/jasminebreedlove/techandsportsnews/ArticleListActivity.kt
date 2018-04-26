@@ -26,6 +26,7 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
 
     private var twoPane: Boolean = false
     var articles: ArrayList<Article> = ArrayList()
+    private var feedChannels = arrayOf("technologyheadlines", "sportsheadlines")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +43,14 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
             twoPane = true
         }
 
-        buildNewsFeed()
+        getTechFeed()
+        // technologyheadlines
     } // onCreate()
 
-    private fun buildNewsFeed() {
-        info("getting news from abc rss feeds:::\n")
-        NewsServiceImpl().setupRetrofit().getTechNews().enqueue(object : Callback<Rss> {
+
+    private fun getTechFeed() {
+        info("getting tech news from abc rss feeds:::\n")
+        NewsServiceImpl().setupRetrofit().getRssFeed("technologyheadlines").enqueue(object : Callback<Rss> {
             override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
                 response?.body()?.channel?.articleList?.forEach { articles.add(it) }
 
@@ -61,7 +64,25 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
                 info("Error in processing request:: ${t?.cause}")
             }
         })
-    } // buildNewsFeed()
+    } // getTechFeed()
+
+    fun getSportsFeed() {
+        info("getting sports news from abc rss feeds:::\n")
+        NewsServiceImpl().setupRetrofit().getRssFeed("sportsheadlines").enqueue(object : Callback<Rss> {
+            override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
+                response?.body()?.channel?.articleList?.forEach { articles.add(it) }
+
+                response?.body()?.channel?.articleList?.forEach { info("Sports article info:::: title: " +
+                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}\ncategory: ${it.category}") }
+
+                article_list.adapter = ArticleRecyclerViewAdapter(this@ArticleListActivity, articles, twoPane)
+            }
+
+            override fun onFailure(call: Call<Rss>?, t: Throwable?) {
+                info("Error in processing request:: ${t?.cause}")
+            }
+        })
+    }
 
     class ArticleRecyclerViewAdapter(private val parentActivity: ArticleListActivity,
                                      private val articles: ArrayList<Article>,
@@ -74,31 +95,35 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
             onClickListener = View.OnClickListener { v ->
                 val article = v.tag as Article
                 if (twoPane) {
-                    if (parentActivity.intent.extras.containsKey(CategoryChooser.TECH_CATEGORY_SELECTOR)) {
-                        val fragment = ArticleDetailFragment().apply {
-                            arguments = Bundle().apply {
-                                putString(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
-                                putString(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
-                                putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
-                                putString(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
-                            }
+                    val fragment = ArticleDetailFragment().apply {
+                        arguments = Bundle().apply {
+                            putString(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                            putString(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
+                            putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
+                            putString(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
                         }
-                        parentActivity.supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.article_detail_container, fragment) // replace existing article content
-                                .commit()
                     }
+                    parentActivity.supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.article_detail_container, fragment) // replace existing article content
+                            .commit()
                 } else {
-                    val intent = Intent(v.context, ArticleDetailActivity::class.java).apply {
-                        putExtra(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
-                        putExtra(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
-                        putExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
-                        putExtra(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
-                    }
-                    v.context.startActivity(intent)
+                    addTechFragment(article, v)
+
                 }
             }
         }
+
+        fun addTechFragment(article: Article, v: View) {
+            val intent = Intent(v.context, ArticleDetailActivity::class.java).apply {
+                putExtra(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                putExtra(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
+                putExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
+                putExtra(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
+            }
+            v.context.startActivity(intent)
+        }
+
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)

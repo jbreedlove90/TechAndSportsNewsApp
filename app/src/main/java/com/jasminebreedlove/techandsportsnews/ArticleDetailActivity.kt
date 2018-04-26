@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_article_detail.*
 
 class ArticleDetailActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_article_detail)
@@ -25,20 +26,26 @@ class ArticleDetailActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
-            val fragment = ArticleDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ArticleDetailFragment.ARTICLE_TITLE,
-                            intent.getStringExtra(ArticleDetailFragment.ARTICLE_TITLE))
-                    putString(ArticleDetailFragment.ARTICLE_PUB, intent.getStringExtra(ArticleDetailFragment.ARTICLE_PUB))
-                    putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, intent.getStringExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION))
-                    putString(ArticleDetailFragment.ARTICLE_CATEGORY, intent.getStringExtra(ArticleDetailFragment.ARTICLE_CATEGORY))
-                }
-            }
+            addTechFragment()
 
-            supportFragmentManager.beginTransaction()
-                    .add(R.id.article_detail_container, fragment)
-                    .commit()
+
         }
+    }
+
+    fun addTechFragment() {
+        val fragment = ArticleDetailFragment().apply {
+            arguments = Bundle().apply {
+                putString(ArticleDetailFragment.ARTICLE_TITLE,
+                        intent.getStringExtra(ArticleDetailFragment.ARTICLE_TITLE))
+                putString(ArticleDetailFragment.ARTICLE_PUB, intent.getStringExtra(ArticleDetailFragment.ARTICLE_PUB))
+                putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, intent.getStringExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION))
+                putString(ArticleDetailFragment.ARTICLE_CATEGORY, intent.getStringExtra(ArticleDetailFragment.ARTICLE_CATEGORY))
+            }
+        }
+
+        supportFragmentManager.beginTransaction()
+                .add(R.id.article_detail_container, fragment)
+                .commit()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) =
