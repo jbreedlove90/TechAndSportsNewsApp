@@ -16,8 +16,13 @@ class ArticleDetailActivity : AppCompatActivity() {
         setSupportActionBar(detail_toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+            sharingIntent.type = "text/plain"
+            val shareBody = intent.getStringExtra(ArticleDetailFragment.ARTICLE_LINK)
+            val shareSub = intent.getStringExtra(ArticleDetailFragment.ARTICLE_TITLE)
+            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
+            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
+            startActivity(Intent.createChooser(sharingIntent, "Share what's happening in tech and sports via Tech & Sports News App!"))
         }
 
         // Show the Up button in the action bar.
@@ -32,11 +37,12 @@ class ArticleDetailActivity : AppCompatActivity() {
         }
     }
 
-    fun addTechFragment() {
+    private fun addTechFragment() {
         val fragment = ArticleDetailFragment().apply {
             arguments = Bundle().apply {
                 putString(ArticleDetailFragment.ARTICLE_TITLE,
                         intent.getStringExtra(ArticleDetailFragment.ARTICLE_TITLE))
+                putString(ArticleDetailFragment.ARTICLE_LINK, intent.getStringExtra(ArticleDetailFragment.ARTICLE_LINK))
                 putString(ArticleDetailFragment.ARTICLE_PUB, intent.getStringExtra(ArticleDetailFragment.ARTICLE_PUB))
                 putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, intent.getStringExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION))
                 putString(ArticleDetailFragment.ARTICLE_CATEGORY, intent.getStringExtra(ArticleDetailFragment.ARTICLE_CATEGORY))

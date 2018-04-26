@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">TechAndSportsNews</string>
+    <string name="app_name">Tech &amp; Sports News</string>
     <string name="title_article_detail">Article Detail</string>
     <string name="tech_category">Technology</string>
     <string name="sports_category">Sports</string>
     <string name="title_sportsarticle_list">SportsArticles</string>
     <string name="title_sportsarticle_detail">SportsArticle Detail</string>
+    <string name="icon_description">Logo image</string>
 </resources>

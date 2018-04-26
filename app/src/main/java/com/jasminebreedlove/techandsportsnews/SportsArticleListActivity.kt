@@ -12,7 +12,6 @@ import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.dao.Article
 import com.jasminebreedlove.techandsportsnews.dao.Rss
 
-import com.jasminebreedlove.techandsportsnews.dummy.DummyContent
 import com.jasminebreedlove.techandsportsnews.utils.NewsServiceImpl
 import kotlinx.android.synthetic.main.activity_sportsarticle_list.*
 import kotlinx.android.synthetic.main.article_list.*
@@ -23,7 +22,6 @@ import org.jetbrains.anko.info
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 
 class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
 
@@ -37,26 +35,18 @@ class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(sports_toolbar)
         sports_toolbar.title = title
 
-        sports_fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
         if (sportsarticle_detail_container != null) {
             twoPane = true
         }
 
         getSportsFeed()
-    }
+    } // onCreate()
 
-    fun getSportsFeed() {
+    private fun getSportsFeed() {
         info("getting sports news from abc rss feeds:::\n")
         NewsServiceImpl().setupRetrofit().getRssFeed("sportsheadlines").enqueue(object : Callback<Rss> {
             override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
                 response?.body()?.channel?.articleList?.forEach { articles.add(it) }
-
-                response?.body()?.channel?.articleList?.forEach { info("Sports article info:::: title: " +
-                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}\ncategory: ${it.category}") }
 
                 sportsarticle_list.adapter = SportsArticleListActivity.SimpleItemRecyclerViewAdapter(this@SportsArticleListActivity, articles, twoPane)
             }
@@ -67,6 +57,7 @@ class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
         })
     }
 
+    // todo: add article link to view
     class SimpleItemRecyclerViewAdapter(private val parentActivity: SportsArticleListActivity,
                                         private val articles: ArrayList<Article>,
                                         private val twoPane: Boolean) :
@@ -81,6 +72,7 @@ class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
                     val fragment = SportsArticleDetailFragment().apply {
                         arguments = Bundle().apply {
                             putString(SportsArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                            putString(SportsArticleDetailFragment.ARTICLE_LINK, article.link)
                             putString(SportsArticleDetailFragment.ARTICLE_PUB, article.pubDate)
                             putString(SportsArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
                             putString(SportsArticleDetailFragment.ARTICLE_CATEGORY, article.category)
@@ -93,6 +85,7 @@ class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
                 } else {
                     val intent = Intent(v.context, SportsArticleDetailActivity::class.java).apply {
                         putExtra(SportsArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                        putExtra(SportsArticleDetailFragment.ARTICLE_LINK, article.link)
                         putExtra(SportsArticleDetailFragment.ARTICLE_PUB, article.pubDate)
                         putExtra(SportsArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
                         putExtra(SportsArticleDetailFragment.ARTICLE_CATEGORY, article.category)

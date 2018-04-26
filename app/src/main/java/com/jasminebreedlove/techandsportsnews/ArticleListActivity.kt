@@ -26,7 +26,6 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
 
     private var twoPane: Boolean = false
     var articles: ArrayList<Article> = ArrayList()
-    private var feedChannels = arrayOf("technologyheadlines", "sportsheadlines")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,17 +33,11 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
         setSupportActionBar(toolbar)
         toolbar.title = title
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
         if (article_detail_container != null) {
             twoPane = true
         }
 
         getTechFeed()
-        // technologyheadlines
     } // onCreate()
 
 
@@ -66,24 +59,7 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
         })
     } // getTechFeed()
 
-    fun getSportsFeed() {
-        info("getting sports news from abc rss feeds:::\n")
-        NewsServiceImpl().setupRetrofit().getRssFeed("sportsheadlines").enqueue(object : Callback<Rss> {
-            override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
-                response?.body()?.channel?.articleList?.forEach { articles.add(it) }
-
-                response?.body()?.channel?.articleList?.forEach { info("Sports article info:::: title: " +
-                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}\ncategory: ${it.category}") }
-
-                article_list.adapter = ArticleRecyclerViewAdapter(this@ArticleListActivity, articles, twoPane)
-            }
-
-            override fun onFailure(call: Call<Rss>?, t: Throwable?) {
-                info("Error in processing request:: ${t?.cause}")
-            }
-        })
-    }
-
+    // todo: add article link to view
     class ArticleRecyclerViewAdapter(private val parentActivity: ArticleListActivity,
                                      private val articles: ArrayList<Article>,
                                      private val twoPane: Boolean) :
@@ -98,6 +74,7 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
                     val fragment = ArticleDetailFragment().apply {
                         arguments = Bundle().apply {
                             putString(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                            putString(ArticleDetailFragment.ARTICLE_LINK, article.link)
                             putString(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
                             putString(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
                             putString(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)
@@ -114,9 +91,10 @@ class ArticleListActivity : AppCompatActivity(), AnkoLogger {
             }
         }
 
-        fun addTechFragment(article: Article, v: View) {
+        private fun addTechFragment(article: Article, v: View) {
             val intent = Intent(v.context, ArticleDetailActivity::class.java).apply {
                 putExtra(ArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
+                putExtra(ArticleDetailFragment.ARTICLE_LINK, article.link)
                 putExtra(ArticleDetailFragment.ARTICLE_PUB, article.pubDate)
                 putExtra(ArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
                 putExtra(ArticleDetailFragment.ARTICLE_CATEGORY, article.category)

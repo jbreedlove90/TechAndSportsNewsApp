@@ -32,8 +32,5 @@ class NewsServiceImpl : AnkoLogger{
     interface NewsService {
         @GET("abcnews/{endpoint}")
         fun getRssFeed(@Path("endpoint") endpoint: String) : Call<Rss>
-
-        @GET("sportsheadlines")
-        fun getSportsNews() : Call<Rss>
     }
 }

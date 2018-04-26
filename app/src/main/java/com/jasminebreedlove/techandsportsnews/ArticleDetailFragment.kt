@@ -17,8 +17,9 @@ class ArticleDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARTICLE_TITLE)) {
-                article.articleTitle = it.getString(ARTICLE_TITLE)
+            if (it.containsKey(ArticleDetailFragment.ARTICLE_TITLE)) {
+                article.articleTitle = it.getString(ArticleDetailFragment.ARTICLE_TITLE)
+                article.link = it.getString(ArticleDetailFragment.ARTICLE_LINK)
                 article.pubDate = it.getString(ArticleDetailFragment.ARTICLE_PUB)
                 article.description = it.getString(ArticleDetailFragment.ARTICLE_DESCRIPTION)
                 article.category = it.getString(ArticleDetailFragment.ARTICLE_CATEGORY)
@@ -44,6 +45,7 @@ class ArticleDetailFragment : Fragment() {
 
     companion object {
         const val ARTICLE_TITLE = "article_title"
+        const val ARTICLE_LINK = "article_link"
         const val ARTICLE_PUB = "article_pub_date"
         const val ARTICLE_DESCRIPTION = "article_description"
         const val ARTICLE_CATEGORY = "article_category"

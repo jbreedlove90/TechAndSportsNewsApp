@@ -6,16 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import com.jasminebreedlove.techandsportsnews.dummy.DummyContent
 import kotlinx.android.synthetic.main.activity_sportsarticle_detail.*
 import kotlinx.android.synthetic.main.sportsarticle_detail.view.*
 
 
 class SportsArticleDetailFragment : Fragment() {
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
     private var article: Article = Article()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +20,7 @@ class SportsArticleDetailFragment : Fragment() {
         arguments?.let {
             if (it.containsKey(SportsArticleDetailFragment.ARTICLE_TITLE)) {
                 article.articleTitle = it.getString(SportsArticleDetailFragment.ARTICLE_TITLE)
+                article.link = it.getString(SportsArticleDetailFragment.ARTICLE_LINK)
                 article.pubDate = it.getString(SportsArticleDetailFragment.ARTICLE_PUB)
                 article.description = it.getString(SportsArticleDetailFragment.ARTICLE_DESCRIPTION)
                 article.category = it.getString(SportsArticleDetailFragment.ARTICLE_CATEGORY)
@@ -49,6 +46,7 @@ class SportsArticleDetailFragment : Fragment() {
 
     companion object {
         const val ARTICLE_TITLE = "article_title_sports"
+        const val ARTICLE_LINK = "article_link_sports"
         const val ARTICLE_PUB = "article_pub_date_sports"
         const val ARTICLE_DESCRIPTION = "article_description_sports"
         const val ARTICLE_CATEGORY = "article_category_sports"
