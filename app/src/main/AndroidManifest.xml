@@ -12,31 +12,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ArticleListActivity"
+            android:name=".tech.TechArticleListActivity"
             android:label="@string/tech_category"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ArticleDetailActivity"
+            android:name=".tech.TechArticleDetailActivity"
             android:label="@string/title_article_detail"
-            android:parentActivityName=".ArticleListActivity"
+            android:parentActivityName=".tech.TechArticleListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jasminebreedlove.techandsportsnews.ArticleListActivity" />
+                android:value="com.jasminebreedlove.techandsportsnews.tech.TechArticleListActivity" />
         </activity>
         <activity android:name=".CategoryChooser" />
         <activity
-            android:name=".SportsArticleListActivity"
+            android:name=".sports.SportsArticleListActivity"
             android:label="@string/sports_category"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SportsArticleDetailActivity"
+            android:name=".sports.SportsArticleDetailActivity"
             android:label="@string/title_sportsarticle_detail"
-            android:parentActivityName=".SportsArticleListActivity"
+            android:parentActivityName=".sports.SportsArticleListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jasminebreedlove.techandsportsnews.SportsArticleListActivity" />
+                android:value="com.jasminebreedlove.techandsportsnews.sports.SportsArticleListActivity" />
         </activity>
         <activity android:name=".SplashScreenActivity"
             android:theme="@style/AppTheme.NoActionBar">

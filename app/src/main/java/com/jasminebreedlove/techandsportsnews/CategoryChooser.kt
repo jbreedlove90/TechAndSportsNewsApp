@@ -4,6 +4,8 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.jasminebreedlove.techandsportsnews.sports.SportsArticleListActivity
+import com.jasminebreedlove.techandsportsnews.tech.TechArticleListActivity
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
@@ -18,7 +20,7 @@ class CategoryChooser : AppCompatActivity(), AnkoLogger {
         when(view.id) {
             R.id.select_tech_btn -> {
                 info("tech ::: ")
-                val techIntent = Intent(this, ArticleListActivity::class.java).apply {
+                val techIntent = Intent(this, TechArticleListActivity::class.java).apply {
                     putExtra(TECH_CATEGORY_SELECTOR, "retrieve_tech")
                 }
                 startActivityForResult(techIntent,0)

@@ -10,7 +10,7 @@
     android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:showDividers="middle"
-    tools:context=".SportsArticleListActivity">
+    tools:context=".sports.SportsArticleListActivity">
 
     <!--
     This layout is a two-pane layout for the SportsArticles
@@ -27,7 +27,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context="com.jasminebreedlove.techandsportsnews.SportsArticleListActivity"
+        tools:context="com.jasminebreedlove.techandsportsnews.sports.SportsArticleListActivity"
         tools:listitem="@layout/sportsarticle_list_content" />
 
     <FrameLayout
