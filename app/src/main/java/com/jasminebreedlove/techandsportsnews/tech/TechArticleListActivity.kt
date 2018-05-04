@@ -10,22 +10,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import com.jasminebreedlove.techandsportsnews.dao.Rss
-import com.jasminebreedlove.techandsportsnews.utils.NewsServiceImpl
 
 import kotlinx.android.synthetic.main.activity_article_list.*
 import kotlinx.android.synthetic.main.article_list_content.view.*
 import kotlinx.android.synthetic.main.article_list.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import java.util.*
 
 class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
     private var twoPane: Boolean = false
     var articles: ArrayList<Article> = ArrayList()
+    lateinit var techViewModel: TechViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +36,31 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
             twoPane = true
         }
 
-        getTechFeed()
+        // initialize viewmodel
+        techViewModel = ViewModelProviders.of(this).get(TechViewModel::class.java)
+        setupRecyclerView()
+
+    //    getTechFeed()
     } // onCreate()
 
+    fun setupRecyclerView() {
+        // create observer
+        val articleListObserver = Observer { articleList: ArrayList<Article>? ->
+            if (articleList != null) {
+                article_list.adapter = TechArticleListActivity.ArticleRecyclerViewAdapter(this@TechArticleListActivity, articleList, twoPane)
+            }
+        }
+            // another way to write the observer
+//        val seekBarValObserver = object : Observer<ArrayList<Article>> {
+//            override fun onChanged(t: ArrayList<Article>?) {
+//            }
+//        }
 
-    private fun getTechFeed() {
+        // observe data in viewmodel with observer
+        techViewModel.loadNewsFromTech().observe(this, articleListObserver)
+    } // setupRecyclerView()
+
+    /*private fun getTechFeed() {
         info("getting tech news from abc rss feeds:::\n")
         NewsServiceImpl().setupRetrofit().getRssFeed("technologyheadlines").enqueue(object : Callback<Rss> {
             override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
@@ -57,7 +76,7 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
                 info("Error in processing request:: ${t?.cause}")
             }
         })
-    } // getTechFeed()
+    } // getTechFeed()*/
 
     // todo: add article link to view
     class ArticleRecyclerViewAdapter(private val parentActivity: TechArticleListActivity,
