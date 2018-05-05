@@ -1,7 +1,6 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
 import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.jasminebreedlove.techandsportsnews.api.NewsRepository
 import com.jasminebreedlove.techandsportsnews.dao.Article
@@ -17,6 +16,8 @@ class TechViewModel : ViewModel() {
         articles = newsRepo.loadRssFeed("technologyheadlines")
         return articles
     }
+
+    // todo: use transformations to map the list to an article to get article specific data
 
 
 
