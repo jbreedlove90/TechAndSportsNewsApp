@@ -16,7 +16,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 class NewsRepository : AnkoLogger {
 
-    fun initRetrofit() : RemoteNewsApi {
+    private fun initRetrofit() : RemoteNewsApi {
         return Retrofit.Builder().baseUrl("http://abcnews.go.com/")
                 .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister(AnnotationStrategy())))
                 .build().create(RemoteNewsApi::class.java)

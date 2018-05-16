@@ -10,7 +10,6 @@ import com.jasminebreedlove.techandsportsnews.dao.Article
 import kotlinx.android.synthetic.main.activity_sportsarticle_detail.*
 import kotlinx.android.synthetic.main.sportsarticle_detail.view.*
 
-
 class SportsArticleDetailFragment : Fragment() {
 
     private var article: Article = Article()
@@ -19,13 +18,16 @@ class SportsArticleDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARTICLE_TITLE)) {
-                article.articleTitle = it.getString(ARTICLE_TITLE)
-                article.link = it.getString(ARTICLE_LINK)
-                article.pubDate = it.getString(ARTICLE_PUB)
-                article.description = it.getString(ARTICLE_DESCRIPTION)
-                article.category = it.getString(ARTICLE_CATEGORY)
+            if (it.containsKey(ARTICLE)) {
+                article = it.getSerializable(ARTICLE) as Article
+            }
+        }
+    }
 
+    fun newInstance(article: Article) : SportsArticleDetailFragment {
+        return SportsArticleDetailFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(SportsArticleDetailFragment.ARTICLE, article)
             }
         }
     }
@@ -41,15 +43,10 @@ class SportsArticleDetailFragment : Fragment() {
             rootView.sports_article_pub_date.text = it.pubDate
             rootView.sports_article_description.text = it.description
         }
-
         return rootView
     }
 
     companion object {
-        const val ARTICLE_TITLE = "article_title_sports"
-        const val ARTICLE_LINK = "article_link_sports"
-        const val ARTICLE_PUB = "article_pub_date_sports"
-        const val ARTICLE_DESCRIPTION = "article_description_sports"
-        const val ARTICLE_CATEGORY = "article_category_sports"
+        const val ARTICLE = "sports_article"
     }
 }

@@ -1,19 +1,18 @@
-package com.jasminebreedlove.techandsportsnews.tech
+package com.jasminebreedlove.techandsportsnews.sports
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
 import com.jasminebreedlove.techandsportsnews.api.NewsRepository
 import com.jasminebreedlove.techandsportsnews.dao.Article
 
-class TechViewModel : ViewModel() {
+class SportsViewModel : ViewModel() {
 
     lateinit var articles: LiveData<ArrayList<Article>>
     //var articleItem: LiveData<Article> = Transformations.switchMap(articleTag, (article) -> {})
     val newsRepo: NewsRepository = NewsRepository()
 
-    fun loadNewsFromTech(): LiveData<ArrayList<Article>> {
-        articles = newsRepo.loadRssFeed("technologyheadlines")
+    fun loadNewsFromSports(): LiveData<ArrayList<Article>> {
+        articles = newsRepo.loadRssFeed("sportsheadlines")
         return articles
     }
-
 }

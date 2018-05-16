@@ -35,6 +35,7 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
         if (article_detail_container != null) {
             twoPane = true
+            // techViewModel.isTwoPane.postValue(true)
         }
 
         // initialize viewmodel
@@ -44,7 +45,7 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
     //    getTechFeed()
     } // onCreate()
 
-    fun setupRecyclerView() {
+    private fun setupRecyclerView() {
         progressBarTech.visibility = VISIBLE // todo: figure out why progress bar isn't showing
         // create observer
         val articleListObserver = Observer { articleList: ArrayList<Article>? ->
@@ -63,26 +64,7 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
         // observe data in viewmodel with observer
         techViewModel.loadNewsFromTech().observe(this, articleListObserver)
-
     } // setupRecyclerView()
-
-    /*private fun getTechFeed() {
-        info("getting tech news from abc rss feeds:::\n")
-        NewsServiceImpl().setupRetrofit().getRssFeed("technologyheadlines").enqueue(object : Callback<Rss> {
-            override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
-                response?.body()?.channel?.articleList?.forEach { articles.add(it) }
-
-                response?.body()?.channel?.articleList?.forEach { info("Tech article info:::: title: " +
-                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}\ncategory: ${it.category}") }
-
-                article_list.adapter = ArticleRecyclerViewAdapter(this@TechArticleListActivity, articles, twoPane)
-            }
-
-            override fun onFailure(call: Call<Rss>?, t: Throwable?) {
-                info("Error in processing request:: ${t?.cause}")
-            }
-        })
-    } // getTechFeed()*/
 
     // todo: add article link to view
 }
