@@ -1,10 +1,8 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,25 +25,26 @@ class TechArticleRecycler(private val parentActivity: TechArticleListActivity,
 
             val article = v.tag as Article
         //    techViewModel.articleTag.postValue(article)
+
             if (twoPane) {
-                val fragment = TechArticleDetailFragment().newInstance(article)
-                parentActivity.supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.article_detail_container, fragment) // replace existing article content
-                        .commit()
+                addFragmentToListActivity(article)
             } else {
-                addTechFragment(article, v)
+                addFragmentToDetailActivity(article, v)
             }
         }
     }
 
-    private fun addTechFragment(article: Article, v: View) {
+    private fun addFragmentToListActivity(article: Article) {
+        val fragment = TechArticleDetailFragment().newInstance(article)
+        parentActivity.supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.article_detail_container, fragment) // replace existing article content
+                .commit()
+    }
+
+    private fun addFragmentToDetailActivity(article: Article, v: View) {
         val intent = Intent(v.context, TechArticleDetailActivity::class.java).apply {
-            putExtra(TechArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
-            putExtra(TechArticleDetailFragment.ARTICLE_LINK, article.link)
-            putExtra(TechArticleDetailFragment.ARTICLE_PUB, article.pubDate)
-            putExtra(TechArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
-            putExtra(TechArticleDetailFragment.ARTICLE_CATEGORY, article.category)
+            putExtra(TechArticleDetailFragment.ARTICLE, article)
         }
         v.context.startActivity(intent)
     }
@@ -59,13 +58,11 @@ class TechArticleRecycler(private val parentActivity: TechArticleListActivity,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val article = articles[position]
 
-        /*with(holder.articleTitle) {
+        with(holder.articleTitle) {
             tag = article
             text = article.articleTitle
-            // set article tag in view model for binding
-
             setOnClickListener(onClickListener)
-        }*/
+        }
     }
 
     override fun getItemCount() = articles.size

@@ -1,6 +1,7 @@
 package com.jasminebreedlove.techandsportsnews.dao
 
 import org.simpleframework.xml.*
+import java.io.Serializable
 
 /**
  * Created by Jasmine Breedlove on 4/19/2018.
@@ -23,4 +24,4 @@ data class Article @JvmOverloads constructor(@field:Element(name = "title", requ
                                              @field:Element(name = "link", required = false) var link: String = "",
                                              @field:Element(name = "pubDate", required = false) var pubDate: String = "",
                                              @field:Element(name = "description", required = false) var description: String = "",
-                                             @field:Element(name = "category", required = false) var category: String = "")
+                                             @field:Element(name = "category", required = false) var category: String = "") : Serializable

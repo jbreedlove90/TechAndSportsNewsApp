@@ -18,12 +18,8 @@ class TechArticleDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARTICLE_TITLE)) {
-                article.articleTitle = it.getString(ARTICLE_TITLE)
-                article.link = it.getString(ARTICLE_LINK)
-                article.pubDate = it.getString(ARTICLE_PUB)
-                article.description = it.getString(ARTICLE_DESCRIPTION)
-                article.category = it.getString(ARTICLE_CATEGORY)
+            if (it.containsKey(ARTICLE)) {
+                article = it.getSerializable(ARTICLE) as Article
             }
         }
     }
@@ -31,11 +27,7 @@ class TechArticleDetailFragment : Fragment() {
     fun newInstance(article: Article) : TechArticleDetailFragment {
         return TechArticleDetailFragment().apply {
             arguments = Bundle().apply {
-                putString(ARTICLE_TITLE, article.articleTitle)
-                putString(ARTICLE_LINK, article.link)
-                putString(ARTICLE_PUB, article.pubDate)
-                putString(ARTICLE_DESCRIPTION, article.description)
-                putString(ARTICLE_CATEGORY, article.category)
+                putSerializable(TechArticleDetailFragment.ARTICLE, article)
             }
         }
     }
@@ -55,10 +47,6 @@ class TechArticleDetailFragment : Fragment() {
     }
 
     companion object {
-        const val ARTICLE_TITLE = "article_title"
-        const val ARTICLE_LINK = "article_link"
-        const val ARTICLE_PUB = "article_pub_date"
-        const val ARTICLE_DESCRIPTION = "article_description"
-        const val ARTICLE_CATEGORY = "article_category"
+        const val ARTICLE = "tech_article"
     }
 }
