@@ -24,7 +24,18 @@ class TechArticleDetailFragment : Fragment() {
                 article.pubDate = it.getString(ARTICLE_PUB)
                 article.description = it.getString(ARTICLE_DESCRIPTION)
                 article.category = it.getString(ARTICLE_CATEGORY)
+            }
+        }
+    }
 
+    fun newInstance(article: Article) : TechArticleDetailFragment {
+        return TechArticleDetailFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARTICLE_TITLE, article.articleTitle)
+                putString(ARTICLE_LINK, article.link)
+                putString(ARTICLE_PUB, article.pubDate)
+                putString(ARTICLE_DESCRIPTION, article.description)
+                putString(ARTICLE_CATEGORY, article.category)
             }
         }
     }
@@ -40,7 +51,6 @@ class TechArticleDetailFragment : Fragment() {
             rootView.article_pub_date.text = it.pubDate
             rootView.article_description.text = it.description
         }
-
         return rootView
     }
 

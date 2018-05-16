@@ -63,6 +63,7 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
         // observe data in viewmodel with observer
         techViewModel.loadNewsFromTech().observe(this, articleListObserver)
+
     } // setupRecyclerView()
 
     /*private fun getTechFeed() {
