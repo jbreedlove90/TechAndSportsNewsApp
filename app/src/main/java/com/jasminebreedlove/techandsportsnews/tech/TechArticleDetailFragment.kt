@@ -1,10 +1,19 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.Html
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
 import kotlinx.android.synthetic.main.activity_article_detail.*
@@ -18,13 +27,16 @@ class TechArticleDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARTICLE_TITLE)) {
-                article.articleTitle = it.getString(ARTICLE_TITLE)
-                article.link = it.getString(ARTICLE_LINK)
-                article.pubDate = it.getString(ARTICLE_PUB)
-                article.description = it.getString(ARTICLE_DESCRIPTION)
-                article.category = it.getString(ARTICLE_CATEGORY)
+            if (it.containsKey(ARTICLE)) {
+                article = it.getSerializable(ARTICLE) as Article
+            }
+        }
+    }
 
+    fun newInstance(article: Article) : TechArticleDetailFragment {
+        return TechArticleDetailFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(TechArticleDetailFragment.ARTICLE, article)
             }
         }
     }
@@ -36,19 +48,22 @@ class TechArticleDetailFragment : Fragment() {
         // todo: add category to view and xml layout file
         // load article details in respective views
         article.let {
-            activity?.toolbar_layout?.title = it.articleTitle
+            activity?.toolbar_layout?.title = it.articleTitle // set toolbar title to article title
             rootView.article_pub_date.text = it.pubDate
             rootView.article_description.text = it.description
+            rootView.article_link.apply {
+                val spanStringBuilder = SpannableStringBuilder().apply {
+                    append(resources.getString(R.string.full_story_text))
+                    setSpan(URLSpan(it.link), 0, this.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                setText(spanStringBuilder, TextView.BufferType.SPANNABLE)
+                movementMethod = LinkMovementMethod.getInstance()
+            }
         }
-
         return rootView
     }
 
     companion object {
-        const val ARTICLE_TITLE = "article_title"
-        const val ARTICLE_LINK = "article_link"
-        const val ARTICLE_PUB = "article_pub_date"
-        const val ARTICLE_DESCRIPTION = "article_description"
-        const val ARTICLE_CATEGORY = "article_category"
+        const val ARTICLE = "tech_article"
     }
 }

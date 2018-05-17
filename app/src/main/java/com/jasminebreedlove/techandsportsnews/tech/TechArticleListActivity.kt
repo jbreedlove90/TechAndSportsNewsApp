@@ -10,22 +10,22 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import com.jasminebreedlove.techandsportsnews.dao.Rss
-import com.jasminebreedlove.techandsportsnews.utils.NewsServiceImpl
 
 import kotlinx.android.synthetic.main.activity_article_list.*
 import kotlinx.android.synthetic.main.article_list_content.view.*
 import kotlinx.android.synthetic.main.article_list.*
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import java.util.*
 
 class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
-    private var twoPane: Boolean = false
-    var articles: ArrayList<Article> = ArrayList()
+    private var twoPane: Boolean = false // todo: might need to move to viewmodel
+    lateinit var techViewModel: TechViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,95 +35,36 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
         if (article_detail_container != null) {
             twoPane = true
+            // techViewModel.isTwoPane.postValue(true)
         }
 
-        getTechFeed()
+        // initialize viewmodel
+        techViewModel = ViewModelProviders.of(this).get(TechViewModel::class.java)
+        setupRecyclerView()
+
+    //    getTechFeed()
     } // onCreate()
 
-
-    private fun getTechFeed() {
-        info("getting tech news from abc rss feeds:::\n")
-        NewsServiceImpl().setupRetrofit().getRssFeed("technologyheadlines").enqueue(object : Callback<Rss> {
-            override fun onResponse(call: Call<Rss>?, response: Response<Rss>?) {
-                response?.body()?.channel?.articleList?.forEach { articles.add(it) }
-
-                response?.body()?.channel?.articleList?.forEach { info("Tech article info:::: title: " +
-                        "${it.articleTitle}\ndescription: ${it.description}\npub date: ${it.pubDate}\ncategory: ${it.category}") }
-
-                article_list.adapter = ArticleRecyclerViewAdapter(this@TechArticleListActivity, articles, twoPane)
+    private fun setupRecyclerView() {
+        progressBarTech.visibility = VISIBLE // todo: figure out why progress bar isn't showing
+        // create observer
+        val articleListObserver = Observer { articleList: ArrayList<Article>? ->
+            if (articleList != null) {
+                val techAdapter = TechArticleRecycler(this, articleList, twoPane)
+                article_list.adapter = techAdapter
             }
+        }
 
-            override fun onFailure(call: Call<Rss>?, t: Throwable?) {
-                info("Error in processing request:: ${t?.cause}")
-            }
-        })
-    } // getTechFeed()
+        progressBarTech.visibility = GONE
+            // another way to write the observer
+//        val seekBarValObserver = object : Observer<ArrayList<Article>> {
+//            override fun onChanged(t: ArrayList<Article>?) {
+//            }
+//        }
+
+        // observe data in viewmodel with observer
+        techViewModel.loadNewsFromTech().observe(this, articleListObserver)
+    } // setupRecyclerView()
 
     // todo: add article link to view
-    class ArticleRecyclerViewAdapter(private val parentActivity: TechArticleListActivity,
-                                     private val articles: ArrayList<Article>,
-                                     private val twoPane: Boolean) :
-            RecyclerView.Adapter<ArticleRecyclerViewAdapter.ViewHolder>() {
-
-        private val onClickListener: View.OnClickListener
-
-        init {
-            onClickListener = View.OnClickListener { v ->
-                val article = v.tag as Article
-                if (twoPane) {
-                    val fragment = TechArticleDetailFragment().apply {
-                        arguments = Bundle().apply {
-                            putString(TechArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
-                            putString(TechArticleDetailFragment.ARTICLE_LINK, article.link)
-                            putString(TechArticleDetailFragment.ARTICLE_PUB, article.pubDate)
-                            putString(TechArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
-                            putString(TechArticleDetailFragment.ARTICLE_CATEGORY, article.category)
-                        }
-                    }
-                    parentActivity.supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.article_detail_container, fragment) // replace existing article content
-                            .commit()
-                } else {
-                    addTechFragment(article, v)
-
-                }
-            }
-        }
-
-        private fun addTechFragment(article: Article, v: View) {
-            val intent = Intent(v.context, TechArticleDetailActivity::class.java).apply {
-                putExtra(TechArticleDetailFragment.ARTICLE_TITLE, article.articleTitle)
-                putExtra(TechArticleDetailFragment.ARTICLE_LINK, article.link)
-                putExtra(TechArticleDetailFragment.ARTICLE_PUB, article.pubDate)
-                putExtra(TechArticleDetailFragment.ARTICLE_DESCRIPTION, article.description)
-                putExtra(TechArticleDetailFragment.ARTICLE_CATEGORY, article.category)
-            }
-            v.context.startActivity(intent)
-        }
-
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.article_list_content, parent, false)
-            return ViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val article = articles[position]
-            holder.articleTitle.text = article.articleTitle
-
-            with(holder.articleTitle) {
-                tag = article
-                setOnClickListener(onClickListener)
-            }
-        }
-
-        override fun getItemCount() = articles.size
-
-        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val articleTitle: TextView = view.article_title
-        } // inner custom ViewHolder class
-
-    } // custom RecyclerAdapter class
 }

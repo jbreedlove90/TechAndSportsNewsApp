@@ -2,14 +2,18 @@ package com.jasminebreedlove.techandsportsnews.sports
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
 import kotlinx.android.synthetic.main.activity_sportsarticle_detail.*
 import kotlinx.android.synthetic.main.sportsarticle_detail.view.*
-
 
 class SportsArticleDetailFragment : Fragment() {
 
@@ -19,13 +23,16 @@ class SportsArticleDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            if (it.containsKey(ARTICLE_TITLE)) {
-                article.articleTitle = it.getString(ARTICLE_TITLE)
-                article.link = it.getString(ARTICLE_LINK)
-                article.pubDate = it.getString(ARTICLE_PUB)
-                article.description = it.getString(ARTICLE_DESCRIPTION)
-                article.category = it.getString(ARTICLE_CATEGORY)
+            if (it.containsKey(ARTICLE)) {
+                article = it.getSerializable(ARTICLE) as Article
+            }
+        }
+    }
 
+    fun newInstance(article: Article) : SportsArticleDetailFragment {
+        return SportsArticleDetailFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(SportsArticleDetailFragment.ARTICLE, article)
             }
         }
     }
@@ -40,16 +47,19 @@ class SportsArticleDetailFragment : Fragment() {
             activity?.sports_toolbar_layout?.title = it.articleTitle
             rootView.sports_article_pub_date.text = it.pubDate
             rootView.sports_article_description.text = it.description
+            rootView.sports_article_link.apply {
+                val spanStringBuilder = SpannableStringBuilder().apply {
+                    append(resources.getString(R.string.full_story_text))
+                    setSpan(URLSpan(it.link), 0, this.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }
+                setText(spanStringBuilder, TextView.BufferType.SPANNABLE)
+                movementMethod = LinkMovementMethod.getInstance()
+            }
         }
-
         return rootView
     }
 
     companion object {
-        const val ARTICLE_TITLE = "article_title_sports"
-        const val ARTICLE_LINK = "article_link_sports"
-        const val ARTICLE_PUB = "article_pub_date_sports"
-        const val ARTICLE_DESCRIPTION = "article_description_sports"
-        const val ARTICLE_CATEGORY = "article_category_sports"
+        const val ARTICLE = "sports_article"
     }
 }

@@ -21,6 +21,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBarTech"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="match_parent"
@@ -29,6 +36,5 @@
 
         <include layout="@layout/article_list" />
     </FrameLayout>
-
 
 </android.support.design.widget.CoordinatorLayout>

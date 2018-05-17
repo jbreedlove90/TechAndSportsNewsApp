@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.jasminebreedlove.techandsportsnews.R
+import com.jasminebreedlove.techandsportsnews.dao.Article
 import kotlinx.android.synthetic.main.activity_sportsarticle_detail.*
-
 
 class SportsArticleDetailActivity : AppCompatActivity() {
 
@@ -15,13 +15,15 @@ class SportsArticleDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sportsarticle_detail)
         setSupportActionBar(sports_detail_toolbar)
 
-        sports_fab.setOnClickListener { view ->
-            val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-            sharingIntent.type = "text/plain"
-            val shareBody = intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_LINK)
-            val shareSub = intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_TITLE)
-            sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
-            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
+        sports_fab.setOnClickListener {
+            val article = intent.getSerializableExtra(SportsArticleDetailFragment.ARTICLE) as Article
+            val shareBody = article.link
+            val shareSub = article.articleTitle
+            val sharingIntent = Intent(android.content.Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub)
+                putExtra(android.content.Intent.EXTRA_TEXT, shareBody)
+            }
             startActivity(Intent.createChooser(sharingIntent, "Share what's happening in tech and sports via Tech & Sports News App!"))
         }
 
@@ -34,16 +36,8 @@ class SportsArticleDetailActivity : AppCompatActivity() {
     }
 
     private fun addSportsFragment() {
-        val fragment = SportsArticleDetailFragment().apply {
-            arguments = Bundle().apply {
-                putString(SportsArticleDetailFragment.ARTICLE_TITLE,
-                        intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_TITLE))
-                putString(SportsArticleDetailFragment.ARTICLE_LINK, intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_LINK))
-                putString(SportsArticleDetailFragment.ARTICLE_PUB, intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_PUB))
-                putString(SportsArticleDetailFragment.ARTICLE_DESCRIPTION, intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_DESCRIPTION))
-                putString(SportsArticleDetailFragment.ARTICLE_CATEGORY, intent.getStringExtra(SportsArticleDetailFragment.ARTICLE_CATEGORY))
-            }
-        }
+        val fragment = SportsArticleDetailFragment()
+                .newInstance(intent.getSerializableExtra(SportsArticleDetailFragment.ARTICLE) as Article)
 
         supportFragmentManager.beginTransaction()
                 .add(R.id.sportsarticle_detail_container, fragment)
