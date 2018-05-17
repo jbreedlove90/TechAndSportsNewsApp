@@ -6,4 +6,5 @@
     <string name="title_sportsarticle_list">SportsArticles</string>
     <string name="title_sportsarticle_detail">SportsArticle Detail</string>
     <string name="icon_description">Logo image</string>
+    <string name="full_story_text">Full story</string>
 </resources>
