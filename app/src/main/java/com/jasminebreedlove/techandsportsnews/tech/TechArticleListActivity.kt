@@ -1,18 +1,11 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
 
 import kotlinx.android.synthetic.main.activity_article_list.*
-import kotlinx.android.synthetic.main.article_list_content.view.*
 import kotlinx.android.synthetic.main.article_list.*
 import org.jetbrains.anko.AnkoLogger
 
