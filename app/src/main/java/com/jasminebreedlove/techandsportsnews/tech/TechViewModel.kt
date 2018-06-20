@@ -1,6 +1,7 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.jasminebreedlove.techandsportsnews.api.NewsRepository
 import com.jasminebreedlove.techandsportsnews.dao.Article

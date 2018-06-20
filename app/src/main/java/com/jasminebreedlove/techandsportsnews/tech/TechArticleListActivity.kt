@@ -28,14 +28,12 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
         if (article_detail_container != null) {
             twoPane = true
-            // techViewModel.isTwoPane.postValue(true)
         }
 
         // initialize viewmodel
         techViewModel = ViewModelProviders.of(this).get(TechViewModel::class.java)
         setupRecyclerView()
 
-    //    getTechFeed()
     } // onCreate()
 
     private fun setupRecyclerView() {
@@ -47,7 +45,6 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
                 article_list.adapter = techAdapter
             }
         }
-
         progressBarTech.visibility = GONE
             // another way to write the observer
 //        val seekBarValObserver = object : Observer<ArrayList<Article>> {
@@ -59,5 +56,4 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
         techViewModel.loadNewsFromTech().observe(this, articleListObserver)
     } // setupRecyclerView()
 
-    // todo: add article link to view
 }

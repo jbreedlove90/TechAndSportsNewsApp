@@ -71,7 +71,39 @@ class TechArticleDetailActivityTest {
     @Test
     fun clickOnFab_Ui() {
         // Click on the share fab
-        onView(withId(R.id.fab)).perform(click())
+    //    onView(withId(R.id.fab)).perform(click())
+        val floatingActionButton = onView(
+                allOf(withId(R.id.fab),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()))
+        floatingActionButton.perform(click())
+
+        // verifying share intent is shown on fab click
+        val textView = onView(
+                allOf(withId(android.R.id.title), withText("Share what's happening in tech and sports via Tech & Sports News App!"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.instanceOf(android.widget.ScrollView::class.java),
+                                        0),
+                                0),
+                        isDisplayed()))
+        textView.check(matches(withText("Share what's happening in tech and sports via Tech & Sports News App!")))
+
+        // verifying share options exists on share intent
+        val listView = onView(
+                allOf(IsInstanceOf.instanceOf(android.widget.ListView::class.java),
+                        childAtPosition(
+                                allOf(IsInstanceOf.instanceOf(android.widget.ScrollView::class.java),
+                                        childAtPosition(
+                                                withId(android.R.id.content),
+                                                0)),
+                                1),
+                        isDisplayed()))
+        listView.check(matches(isDisplayed()))
     }
 
     /*fun withToolbarTitle(title: CharSequence): Matcher<View> {
