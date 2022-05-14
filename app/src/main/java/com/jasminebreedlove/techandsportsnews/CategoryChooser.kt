@@ -1,8 +1,9 @@
 package com.jasminebreedlove.techandsportsnews
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.jasminebreedlove.techandsportsnews.sports.SportsArticleListActivity
 import com.jasminebreedlove.techandsportsnews.tech.TechArticleListActivity
@@ -34,6 +35,11 @@ class CategoryChooser : AppCompatActivity(), AnkoLogger {
                 }
                 startActivityForResult(sportsIntent,0)
             //    startActivity(sportsIntent)
+            }
+            R.id.tv_website_link -> {
+                val i = Intent(Intent.ACTION_VIEW)
+                i.data = Uri.parse("http://abcnews.go.com/")
+                startActivity(i)
             }
 
         }

@@ -14,6 +14,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/tns_launcher_round"
+        app:srcCompat="@mipmap/tns_launcher"
         android:contentDescription="@string/icon_description" />
 </android.support.constraint.ConstraintLayout>
