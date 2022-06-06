@@ -36,7 +36,7 @@ class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
     } // onCreate()
 
     private fun setupRecyclerView() {
-        sportsProgressBarTech.visibility = View.VISIBLE // todo: figure out why progress bar isn't showing
+        sportsProgressBarTech.visibility = View.VISIBLE
         // create observer
         val articleListObserver = Observer { articleList: ArrayList<Article>? ->
             if (articleList != null) {
@@ -45,10 +45,8 @@ class SportsArticleListActivity : AppCompatActivity(), AnkoLogger {
             }
         }
 
-        sportsProgressBarTech.visibility = View.GONE
         // observe data in viewmodel with observer
         sportsViewModel.loadNewsFromSports().observe(this, articleListObserver)
+        sportsProgressBarTech.visibility = View.GONE
     } // setupRecyclerView()
-
-    // todo: add article link to view
 }

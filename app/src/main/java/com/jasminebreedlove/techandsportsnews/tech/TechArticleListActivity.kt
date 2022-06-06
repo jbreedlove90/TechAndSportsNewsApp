@@ -37,15 +37,15 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
     } // onCreate()
 
     private fun setupRecyclerView() {
-        progressBarTech.visibility = VISIBLE // todo: figure out why progress bar isn't showing
+        progressBarTech.visibility = VISIBLE
         // create observer
         val articleListObserver = Observer { articleList: ArrayList<Article>? ->
+            //progressBarTech.visibility = GONE
             if (articleList != null) {
                 val techAdapter = TechArticleRecycler(this, articleList, twoPane)
                 article_list.adapter = techAdapter
             }
         }
-        progressBarTech.visibility = GONE
             // another way to write the observer
 //        val seekBarValObserver = object : Observer<ArrayList<Article>> {
 //            override fun onChanged(t: ArrayList<Article>?) {
@@ -54,6 +54,7 @@ class TechArticleListActivity : AppCompatActivity(), AnkoLogger {
 
         // observe data in viewmodel with observer
         techViewModel.loadNewsFromTech().observe(this, articleListObserver)
+        progressBarTech.visibility = GONE
     } // setupRecyclerView()
 
 }

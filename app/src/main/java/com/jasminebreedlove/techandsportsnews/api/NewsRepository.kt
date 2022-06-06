@@ -4,6 +4,8 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import com.jasminebreedlove.techandsportsnews.dao.Article
 import com.jasminebreedlove.techandsportsnews.dao.Rss
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import org.simpleframework.xml.convert.AnnotationStrategy
@@ -16,9 +18,17 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 class NewsRepository : AnkoLogger {
 
+    private val logIntercept = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    private val newClient = OkHttpClient.Builder().also {
+        //it.addInterceptor(logIntercept)
+    }
+
     private fun initRetrofit() : RemoteNewsApi {
-        return Retrofit.Builder().baseUrl("http://abcnews.go.com/")
-                .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister(AnnotationStrategy())))
+        return Retrofit.Builder().baseUrl("https://abcnews.go.com/")
+                .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister(AnnotationStrategy()))).client(newClient.build())
                 .build().create(RemoteNewsApi::class.java)
     }
 
