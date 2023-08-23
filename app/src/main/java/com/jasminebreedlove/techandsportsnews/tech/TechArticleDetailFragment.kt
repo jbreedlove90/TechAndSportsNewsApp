@@ -1,7 +1,7 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
@@ -10,14 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import kotlinx.android.synthetic.main.activity_article_detail.*
-import kotlinx.android.synthetic.main.article_detail.view.*
+import com.jasminebreedlove.techandsportsnews.databinding.ArticleDetailBinding
 
 class TechArticleDetailFragment : Fragment() {
 
     private var article: Article = Article()
+    private var _binding: ArticleDetailBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,15 +41,15 @@ class TechArticleDetailFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.article_detail, container, false)
+        _binding = ArticleDetailBinding.inflate(inflater, container, false)
 
         // todo: add category to view and xml layout file
         // load article details in respective views
         article.let {
-            activity?.toolbar_layout?.title = it.articleTitle // set toolbar title to article title
-            rootView.article_pub_date.text = it.pubDate
-            rootView.article_description.text = it.description
-            rootView.article_link.apply {
+            (activity as TechArticleDetailActivity)?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = it.articleTitle // set toolbar title to article title
+            binding.articlePubDate.text = it.pubDate
+            binding.articleDescription.text = it.description
+            binding.articleLink.apply {
                 val spanStringBuilder = SpannableStringBuilder().apply {
                     append(resources.getString(R.string.full_story_text))
                     setSpan(URLSpan(it.link), 0, this.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -56,7 +58,7 @@ class TechArticleDetailFragment : Fragment() {
                 movementMethod = LinkMovementMethod.getInstance()
             }
         }
-        return rootView
+        return binding.root
     }
 
     companion object {

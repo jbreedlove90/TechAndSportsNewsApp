@@ -2,20 +2,28 @@ package com.jasminebreedlove.techandsportsnews.tech
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProviders
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import kotlinx.android.synthetic.main.activity_article_detail.*
+import com.jasminebreedlove.techandsportsnews.databinding.ActivityArticleDetailBinding
 
 class TechArticleDetailActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityArticleDetailBinding
+    lateinit var techViewModel: TechViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_article_detail)
-        setSupportActionBar(detail_toolbar)
 
-        fab.setOnClickListener {
+        binding = ActivityArticleDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        setSupportActionBar(binding.detailToolbar)
+
+        binding.fab.setOnClickListener {
             val article = intent.getSerializableExtra(TechArticleDetailFragment.ARTICLE) as Article
             val shareBody = article.link
             val shareSub = article.articleTitle
@@ -34,6 +42,13 @@ class TechArticleDetailActivity : AppCompatActivity() {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             addTechFragment()
+        }
+
+        // initialize viewmodel
+        techViewModel = ViewModelProviders.of(this).get(TechViewModel::class.java)
+
+        if (binding.articleDetailContainer != null) {
+            techViewModel.twoPane = true
         }
     }
 
