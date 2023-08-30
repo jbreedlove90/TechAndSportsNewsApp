@@ -23,8 +23,7 @@ class TechArticleListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityArticleListBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         binding.toolbar.title = title

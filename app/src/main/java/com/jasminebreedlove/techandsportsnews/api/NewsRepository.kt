@@ -17,7 +17,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 class NewsRepository {
 
     private fun initRetrofit() : RemoteNewsApi {
-        return Retrofit.Builder().baseUrl("http://abcnews.go.com/")
+        return Retrofit.Builder().baseUrl("https://abcnews.go.com/")
                 .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister(AnnotationStrategy())))
                 .build().create(RemoteNewsApi::class.java)
     }
