@@ -1,15 +1,15 @@
 package com.jasminebreedlove.techandsportsnews.tech
 
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import kotlinx.android.synthetic.main.article_list_content.view.*
+import com.jasminebreedlove.techandsportsnews.databinding.ArticleListContentBinding
 import java.util.ArrayList
 
 class TechArticleRecycler(private val parentActivity: TechArticleListActivity,
@@ -50,9 +50,8 @@ class TechArticleRecycler(private val parentActivity: TechArticleListActivity,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.article_list_content, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(ArticleListContentBinding.inflate(LayoutInflater
+            .from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -67,8 +66,8 @@ class TechArticleRecycler(private val parentActivity: TechArticleListActivity,
 
     override fun getItemCount() = articles.size
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val articleTitle: TextView = view.article_title
+    inner class ViewHolder(view: ArticleListContentBinding) : RecyclerView.ViewHolder(view.root) {
+        val articleTitle: TextView = view.articleTitle
     } // inner custom ViewHolder class
 
 }

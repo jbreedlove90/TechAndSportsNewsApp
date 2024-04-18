@@ -1,11 +1,11 @@
 package com.jasminebreedlove.techandsportsnews.api
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.jasminebreedlove.techandsportsnews.dao.Article
 import com.jasminebreedlove.techandsportsnews.dao.Rss
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
+//import org.jetbrains.anko.AnkoLogger
+//import org.jetbrains.anko.info
 import org.simpleframework.xml.convert.AnnotationStrategy
 import org.simpleframework.xml.core.Persister
 import retrofit2.Call
@@ -14,10 +14,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
-class NewsRepository : AnkoLogger {
+class NewsRepository {
 
     private fun initRetrofit() : RemoteNewsApi {
-        return Retrofit.Builder().baseUrl("http://abcnews.go.com/")
+        return Retrofit.Builder().baseUrl("https://abcnews.go.com/")
                 .addConverterFactory(SimpleXmlConverterFactory.createNonStrict(Persister(AnnotationStrategy())))
                 .build().create(RemoteNewsApi::class.java)
     }
@@ -33,7 +33,7 @@ class NewsRepository : AnkoLogger {
             }
 
             override fun onFailure(call: Call<Rss>?, t: Throwable?) {
-                info("Error in processing request:: ${t?.cause}")
+                //info("Error in processing request:: ${t?.cause}")
             }
         })
         return articles

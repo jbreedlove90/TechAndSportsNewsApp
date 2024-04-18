@@ -2,20 +2,26 @@ package com.jasminebreedlove.techandsportsnews.sports
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.lifecycle.ViewModelProviders
 import com.jasminebreedlove.techandsportsnews.R
 import com.jasminebreedlove.techandsportsnews.dao.Article
-import kotlinx.android.synthetic.main.activity_sportsarticle_detail.*
+import com.jasminebreedlove.techandsportsnews.databinding.ActivitySportsarticleDetailBinding
 
 class SportsArticleDetailActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivitySportsarticleDetailBinding
+    lateinit var sportsViewModel: SportsViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sportsarticle_detail)
-        setSupportActionBar(sports_detail_toolbar)
+        binding = ActivitySportsarticleDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.sportsDetailToolbar)
 
-        sports_fab.setOnClickListener {
+        binding.sportsFab.setOnClickListener {
             val article = intent.getSerializableExtra(SportsArticleDetailFragment.ARTICLE) as Article
             val shareBody = article.link
             val shareSub = article.articleTitle
@@ -32,6 +38,13 @@ class SportsArticleDetailActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             addSportsFragment()
+        }
+
+        // initialize viewmodel
+        sportsViewModel = ViewModelProviders.of(this).get(SportsViewModel::class.java)
+
+        if (binding.sportsarticleDetailContainer != null) {
+            sportsViewModel.twoPane = true
         }
     }
 
